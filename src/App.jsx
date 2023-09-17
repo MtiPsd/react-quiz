@@ -63,10 +63,18 @@ function reducer(state, action) {
       return {
         ...state,
         status: 'finished',
+        index: state.index + 1,
         highScore:
           state.points > state.highScore
             ? state.points
             : state.highScore,
+      };
+
+    case 'restart':
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: 'ready',
       };
 
     default:
@@ -128,6 +136,7 @@ export default function App() {
             points={points}
             maxPoints={maxPoints}
             highScore={highScore}
+            dispatch={dispatch}
           />
         )}
 
