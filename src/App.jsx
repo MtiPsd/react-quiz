@@ -5,11 +5,13 @@ import Loader from './Loader';
 import Error from './Error';
 import Main from './Main';
 import StartScreen from './StartScreen';
+import Question from './Question';
 
 const initialState = {
   questions: [],
   // 'loading', 'active', 'error', 'ready', 'finished'
   status: 'loading',
+  index: 0,
 };
 
 function reducer(state, action) {
@@ -27,13 +29,19 @@ function reducer(state, action) {
         status: 'error',
       };
 
+    case 'start':
+      return {
+        ...state,
+        status: 'active',
+      };
+
     default:
       throw new Error('action is not defined !');
   }
 }
 
 export default function App() {
-  const [{ questions, status }, dispatch] = useReducer(
+  const [{ questions, status, index }, dispatch] = useReducer(
     reducer,
     initialState,
   );
@@ -48,14 +56,20 @@ export default function App() {
   }, []);
 
   return (
-    <div className='app'>
+    <div className="app">
       <Header />
 
       <Main>
         {status === 'loading' && <Loader />}
         {status === 'error' && <Error />}
         {status === 'ready' && (
-          <StartScreen numQuestions={numQuestions} />
+          <StartScreen
+            numQuestions={numQuestions}
+            dispatch={dispatch}
+          />
+        )}
+        {status === 'active' && (
+          <Question question={questions[index]} />
         )}
       </Main>
     </div>
