@@ -128,6 +128,12 @@ export default function App() {
               dispatch={dispatch}
               answer={answer}
             />
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              index={index}
+              numQuestions={numQuestions}
+            />
           </>
         )}
 
@@ -139,13 +145,6 @@ export default function App() {
             dispatch={dispatch}
           />
         )}
-
-        <NextButton
-          dispatch={dispatch}
-          answer={answer}
-          index={index}
-          numQuestions={numQuestions}
-        />
       </Main>
     </div>
   );
