@@ -11,6 +11,8 @@ import FinishedScreen from './components/FinishedScreen';
 import Footer from './components/Footer';
 import Timer from './Timer';
 
+const SECOND_PER_QUESTION = 30;
+
 const initialState = {
   questions: [],
   // 'loading', 'active', 'error', 'ready', 'finished'
@@ -19,7 +21,7 @@ const initialState = {
   answer: null,
   points: 0,
   highScore: 0,
-  secondsRemaining: 10,
+  secondsRemaining: null,
 };
 
 function reducer(state, action) {
@@ -41,6 +43,8 @@ function reducer(state, action) {
       return {
         ...state,
         status: 'active',
+        secondsRemaining:
+          state.questions.length * SECOND_PER_QUESTION,
       };
 
     case 'newAnswer':
@@ -83,6 +87,8 @@ function reducer(state, action) {
       return {
         ...state,
         secondsRemaining: state.secondsRemaining - 1,
+        status:
+          state.secondsRemaining === 0 ? 'finished' : state.status,
       };
 
     default:
