@@ -68,12 +68,12 @@ function DateCounter() {
   };
 
   return (
-    <div className='counter'>
+    <div className="counter">
       <div>
         <input
-          type='range'
-          min='0'
-          max='10'
+          type="range"
+          min="0"
+          max="10"
           value={step}
           onChange={defineStep}
         />
