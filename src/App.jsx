@@ -8,6 +8,7 @@ import StartScreen from './StartScreen';
 import Question from './Question';
 import NextButton from './components/NextButton';
 import Progress from './Progress';
+import FinishedScreen from './components/FinishedScreen';
 
 const initialState = {
   questions: [],
@@ -16,6 +17,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  highScore: 0,
 };
 
 function reducer(state, action) {
@@ -57,14 +59,26 @@ function reducer(state, action) {
         answer: null,
       };
 
+    case 'finished':
+      return {
+        ...state,
+        status: 'finished',
+        highScore:
+          state.points > state.highScore
+            ? state.points
+            : state.highScore,
+      };
+
     default:
       throw new Error('action is not defined !');
   }
 }
 
 export default function App() {
-  const [{ questions, status, index, answer, points }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { questions, status, index, answer, points, highScore },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
   const maxPoints = questions.reduce((prev, cur) => {
@@ -109,7 +123,20 @@ export default function App() {
           </>
         )}
 
-        <NextButton dispatch={dispatch} answer={answer} />
+        {status === 'finished' && (
+          <FinishedScreen
+            points={points}
+            maxPoints={maxPoints}
+            highScore={highScore}
+          />
+        )}
+
+        <NextButton
+          dispatch={dispatch}
+          answer={answer}
+          index={index}
+          numQuestions={numQuestions}
+        />
       </Main>
     </div>
   );
