@@ -6,6 +6,7 @@ import Error from './Error';
 import Main from './Main';
 import StartScreen from './StartScreen';
 import Question from './Question';
+import NextButton from './components/NextButton';
 
 const initialState = {
   questions: [],
@@ -48,6 +49,13 @@ function reducer(state, action) {
             : state.points,
       };
 
+    case 'nextQuestion':
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
+      };
+
     default:
       throw new Error('action is not defined !');
   }
@@ -81,6 +89,7 @@ export default function App() {
             dispatch={dispatch}
           />
         )}
+
         {status === 'active' && (
           <Question
             question={questions[index]}
@@ -88,6 +97,8 @@ export default function App() {
             answer={answer}
           />
         )}
+
+        <NextButton dispatch={dispatch} answer={answer} />
       </Main>
     </div>
   );
