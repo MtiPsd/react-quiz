@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import Header from './Header';
 import Loader from './Loader';
 import Error from './Error';
@@ -9,6 +8,8 @@ import Question from './Question';
 import NextButton from './components/NextButton';
 import Progress from './Progress';
 import FinishedScreen from './components/FinishedScreen';
+import Footer from './components/Footer';
+import Timer from './Timer';
 
 const initialState = {
   questions: [],
@@ -18,6 +19,7 @@ const initialState = {
   answer: null,
   points: 0,
   highScore: 0,
+  secondsRemaining: 10,
 };
 
 function reducer(state, action) {
@@ -77,6 +79,12 @@ function reducer(state, action) {
         status: 'ready',
       };
 
+    case 'tick':
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+      };
+
     default:
       throw new Error('action is not defined !');
   }
@@ -84,7 +92,15 @@ function reducer(state, action) {
 
 export default function App() {
   const [
-    { questions, status, index, answer, points, highScore },
+    {
+      questions,
+      status,
+      index,
+      answer,
+      points,
+      highScore,
+      secondsRemaining,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -129,12 +145,18 @@ export default function App() {
               answer={answer}
             />
 
-            <NextButton
-              dispatch={dispatch}
-              answer={answer}
-              index={index}
-              numQuestions={numQuestions}
-            />
+            <Footer>
+              <Timer
+                dispatch={dispatch}
+                secondsRemaining={secondsRemaining}
+              />
+              <NextButton
+                dispatch={dispatch}
+                answer={answer}
+                index={index}
+                numQuestions={numQuestions}
+              />
+            </Footer>
           </>
         )}
 
